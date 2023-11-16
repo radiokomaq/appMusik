@@ -10,7 +10,7 @@ type AudiContextType = {
   const audio = new Audio();
 
   export const AudiContext = createContext<AudiContextType>({
-    handleToggleAudio: (track) => {}, 
+    handleToggleAudio: () => {}, 
     currentTrack: { id: 0, 
         src: "",
          preview: "", 

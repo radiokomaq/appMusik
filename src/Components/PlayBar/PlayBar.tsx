@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import  { useContext, useEffect, useState } from 'react'
 import { AudiContext } from '../../context/AudioContext'
 import { Slider } from "@mui/material"
 import PauseIcon from '@mui/icons-material/Pause';
@@ -25,7 +25,7 @@ const TimeControls = () => {
     const { duration } = currentTrack
 
     const [currentTime, setCurrentTime] = useState(0)
-    const handleChengeCurrentTime = (_: any, value: number) => {
+    const handleChengeCurrentTime = (_: Event, value: number) => {
         const time = Math.round((value / 100) * duration)
         setCurrentTime(time)
         audio.currentTime = time
@@ -46,7 +46,7 @@ const TimeControls = () => {
     return (
         <>
             <p>{formattedCurrentTime}</p>
-            <Slider step={0.01} min={0} max={100} value={sliderCurrentTime} onChange={handleChengeCurrentTime}
+            <Slider step={0.01} min={0} max={100} value={sliderCurrentTime}   onChange={handleChengeCurrentTime as (event: Event, value: number | number[]) => void}
                 sx={{
                     color: 'white',
                     height: '7px',
@@ -117,7 +117,7 @@ const PlayBar = () => {
                     }
                 </IconButton>
                 <div className='flex w-[15%] items-center justify-center flex-col text-[white] text-[6pt] md:text-[8pt] lg:text-[10pt] xl:text-[11pt] 2xl:text-[14pt] overflow-y-hidden max-h-[90px] md:max-h-[150px]'>
-                    <h4>{title}</h4>
+                    <h4>{title} </h4>
                     <p>{artists}</p>
                 </div>
                 <div className='w-full flex flex-row gap-4 items-center text-[white] lg:text-[10pt] xl:text-[12pt] 2xl:text-[14pt] text-[9pt] justify-center'>
