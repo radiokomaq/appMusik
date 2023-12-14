@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import tracksList from "../assets/tracksList";
 type AudiContextType = {
     handleToggleAudio: (track: any) => void; 
+    NextTrack: (track: any) => void; 
     currentTrack: { id: number; src: string; preview: string; duration: number; title: string; artists: string };
     isPlaying:boolean;
     audio:HTMLAudioElement 
@@ -11,6 +12,7 @@ type AudiContextType = {
 
   export const AudiContext = createContext<AudiContextType>({
     handleToggleAudio: () => {}, 
+    NextTrack:() =>{},
     currentTrack: { id: 0, 
         src: "",
          preview: "", 
@@ -50,7 +52,15 @@ const audioProvider = ({ children }: { children: React.ReactNode  }) => {
         }
         
     }
-    const value = {audio, currentTrack, isPlaying,handleToggleAudio}
+    const NextTrack = (track:any) =>{
+        if(track.id == tracksList.length){
+            handleToggleAudio(tracksList[0])
+        }else{
+            handleToggleAudio(tracksList[track.id])
+        }
+    }
+
+    const value = {audio, currentTrack, isPlaying,handleToggleAudio,NextTrack}
     return <AudiContext.Provider value={value}>{children}</AudiContext.Provider>
 }
 

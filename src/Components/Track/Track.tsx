@@ -19,6 +19,8 @@ type TrackProps = {
 };
 type AudiContextType = {
     handleToggleAudio: (track: any) => void;
+    NextTrack: (track: any) => void;
+    
     currentTrack: {
         id: number;
         src: string;
