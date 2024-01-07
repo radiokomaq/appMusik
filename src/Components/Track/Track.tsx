@@ -29,6 +29,7 @@ type AudiContextType = {
         title: string;
         artists: string;
     };
+    volume: number,
     isPlaying:boolean;
     audio:HTMLAudioElement 
 };

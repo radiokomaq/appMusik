@@ -5,6 +5,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import { IconButton } from '@mui/material';
 import { SkipNext } from '@mui/icons-material';
 import { PlayArrow } from '@mui/icons-material';
+import { VolumeUp } from '@mui/icons-material';
 import secondTOMMSS from '../../utils/secondTOMMSS';
 
 type AudiContextType = {
@@ -19,6 +20,7 @@ type AudiContextType = {
         artists: string;
     };
     isPlaying: boolean,
+    volume: number,
     audio: HTMLAudioElement
 };
 
@@ -71,32 +73,41 @@ const TimeControls = () => {
 }
 
 const VolumeControls = () => {
-    const [volume, setVolume] = useState(50)
+    const { audio, volume } = useContext<AudiContextType>(AudiContext)
+    const [localvolume, setLocalVolume] = useState(audio.volume *100)
     const handleChengeVolume = (_: Event, value: number) => {
-        console.log('123');
-        setVolume(value)
+        setLocalVolume(value);
+        audio.volume = value / 100;
 
     }
     return (
-        <>
+        <>  <div className='flex flex-col w-full '>
+            <span className='flex justify-center text-white'>{localvolume} %</span>
             <Slider
                 step={1}
                 min={0}
                 max={100}
-                value={volume}
-                onChange={() => handleChengeVolume as (event: Event, value: number | number[]) => void}
+                value={localvolume}
+                onChange={handleChengeVolume as (event: Event, value: number | number[]) => void}
                 sx={{
                     color: 'white',
-                    height: '100px',
-                    width: '10px',
-                     // Абсолютное позиционирование
-                    top: 0,                // Расположение относительно верхнего края
-                    right: '-15px',        // Выход за правый край контейнера
-                    zIndex: 1,
-                    boxShadow: '0 0 10px rgba(1, 1, 1, 1)',
+                    height: '7px',
+                    '@media (min-width: 768px)': {
+                        height: '18px',
+                    },
+                    '& .MuiSlider-thumb': {
+                        width: '10px',
+                        height: '10px',
+                        '@media (min-width: 768px)': {
+                            width: '28px',
+                            height: '28px',
+                        },
+                    },
                 }}
-            />
+            />    
+           </div>
         </>
+    
     )
 }
 
@@ -105,6 +116,7 @@ const PlayBar = () => {
     const { currentTrack, handleToggleAudio, isPlaying, NextTrack } = useContext<AudiContextType>(AudiContext)
     const { title, artists, preview, duration } = currentTrack
     const formatedDuration = secondTOMMSS(duration)
+    const [volumeDisplay, setVolumeDisplay] = useState<Boolean>(false)
 
 
 
@@ -155,13 +167,33 @@ const PlayBar = () => {
                     <h4>{title} </h4>
                     <p>{artists}</p>
                 </div>
-                {/* доделать слайдер */}
-                {/* <div className='relative visible container w-10  '>             <VolumeControls /></div> */}  
+
    
                 <div className='w-full flex flex-row gap-4 items-center text-[white] lg:text-[10pt] xl:text-[12pt] 2xl:text-[14pt] text-[9pt] justify-center'>
                     <TimeControls />
                     <p >{formatedDuration}</p>
                 </div>
+                {volumeDisplay ? <div 
+                className='w-1/2 flex items-center'
+                onMouseLeave={() => setVolumeDisplay(!volumeDisplay)}><VolumeControls /> </div>:''}  
+                <div className='relative visible container w-10  flex flex-col'>  
+                <VolumeUp
+                    onMouseEnter={() => setVolumeDisplay(!volumeDisplay)}
+                    
+                sx={{
+                    color: 'white',
+                    fontSize: 20,
+                    '@media (min-width: 768px)': {
+                        fontSize: 25,
+                    },
+                    '@media (min-width: 1030px)': {
+                        fontSize: 32,
+                    },
+                    '@media (min-width: 1535px)': {
+                        fontSize: 50,
+                    },
+                }}
+                /></div>  
                 <IconButton onClick={() => NextTrack(currentTrack)}>
                     <SkipNext
 
